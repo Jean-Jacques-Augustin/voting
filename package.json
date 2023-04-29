@@ -1,0 +1,17 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:dev:front": "cd frontend && yarn run dev",
+    "start:dev:back": "cd backend && yarn run nodemon",
+    "start:dev": "concurrently --kill-others \"yarn run start:dev:front\" \"yarn run start:dev:back\"",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd /frontend && yarn run build"
+  },
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
