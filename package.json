@@ -13,6 +13,7 @@
     "install:all": "cd /frontend && yarn install && cd /backend && yarn install"
   },
   "dependencies": {
+    "@emotion/styled": "^11.10.8",
     "concurrently": "^8.0.1"
   }
 }
