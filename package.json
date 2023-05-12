@@ -10,7 +10,10 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd /frontend && yarn run build",
-    "install:all": "cd /frontend && yarn install && cd /backend && yarn install"
+    "install:all": "cd /frontend && yarn install && cd /backend && yarn install",
+    "install:back": "cd backend && yarn install",
+    "install:front": "cd frontend && yarn install",
+    "install:app": "concurrently --kill-others \"yarn run install:front\" \"yarn run install:back\""
   },
   "dependencies": {
     "@emotion/styled": "^11.10.8",

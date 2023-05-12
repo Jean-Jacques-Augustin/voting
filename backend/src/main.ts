@@ -4,9 +4,14 @@ import ConnexionDB from "./db/connexion";
 import appRoute from "./routes/routes";
 
 
+const cors = require('cors');
+
+
+
 const app: Express = express();
 
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use('/api', appRoute);
 ConnexionDB();

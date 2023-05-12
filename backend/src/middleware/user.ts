@@ -5,7 +5,7 @@ import UserModel from "../models/user";
 interface CreateUserDto {
     name: string;
     email: string;
-    password: string;
+    num_vote: string;
     role?: string;
     address?: string;
 }
@@ -16,7 +16,7 @@ interface UpdateUserDto extends CreateUserDto {}
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await UserModel.find();
-        await res.status(200).json(users);
+        res.status(200).json(users);
     } catch (error) {
         next(error);
     }
@@ -28,7 +28,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
         const createUserDto: CreateUserDto = req.body;
         const user = new UserModel(createUserDto);
         const savedUser = await user.save();
-        await res.status(201).json(savedUser);
+        res.status(201).json(savedUser);
     } catch (error) {
         next(error);
     }
