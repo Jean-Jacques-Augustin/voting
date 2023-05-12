@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: true}));
 app.use('/api', appRoute);
 ConnexionDB();
 
-const PORT = 3000;
+const PORT = 5000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
