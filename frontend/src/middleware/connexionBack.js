@@ -1,11 +1,11 @@
 import axios from "axios";
 
 
-const baseUrl = "http://localhost:5000/api";
+export const baseUrl = "http://localhost:5000/api";
 
 export const postData = async (url, data) => {
     const response = await axios.post(`${baseUrl}/${url}`, data);
-    return response.data;
+    return response;
 }
 
 export const getData = async (url) => {
