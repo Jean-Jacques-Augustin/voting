@@ -5,10 +5,10 @@ export const baseUrl = "http://localhost:5000/api";
 
 export const postData = async (url, data) => {
     const response = await axios.post(`${baseUrl}/${url}`, data);
-    return response;
+    return response.data;
 }
 
 export const getData = async (url) => {
     const response = await axios.get(`${baseUrl}/${url}`);
-    return response.user;
+    return response.data;
 }

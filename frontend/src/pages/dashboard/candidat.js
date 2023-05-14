@@ -66,7 +66,6 @@ export default function Candidat() {
         </Typography>
         <br/>
         <Paper sx={{width: '100%', mb: 12}}>
-
             <TableContainer>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
