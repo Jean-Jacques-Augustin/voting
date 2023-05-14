@@ -7,6 +7,7 @@ import {
     getCandidateById,
     updateCandidate
 } from "../middleware/candidate";
+import {registerUser} from "../middleware/authentication";
 
 
 
@@ -50,6 +51,13 @@ appRoute.put('/candidates/:id', updateCandidate);
 
 // Supprimer une candidature existante
 appRoute.delete('/candidates/:id', deleteCandidate);
+
+
+/**
+ * Authentication routes
+ */
+
+appRoute.post('/register', registerUser);
 
 
 export default appRoute;

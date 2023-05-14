@@ -1,4 +1,4 @@
-import { Box, Button, Card } from "@mui/material";
+import { Box, Button, Card, Typography } from "@mui/material";
 import { useState } from "react";
 import CustomTextField from "../components/CustomTextField";
 import { postData } from "../middleware/connexionBack";
@@ -13,6 +13,7 @@ export default function Signup() {
     });
 
     const dispatch = useDispatch();
+    const [error, setError] = useState('');
 
     const [errors, setErrors] = useState({
         num_vote: "",
@@ -56,15 +57,10 @@ export default function Signup() {
             password: formData.password,
         });
 
-        response.then((data) => {
-            if (data.status === 200) {
-                dispatch(setEmail(data.data.email)).then(() => {
-                    window.location.href = "/dashboard";
-                });
-            } else {
-                setErrors({ num_vote: "Numéro de vote ou mot de passe incorrect" });
-            }
-        });
+        if (response.status === 200) {
+            //dispatch(setEmail(formData.num_vote));
+            console.log(response.data);
+        }
     };
 
     return (
@@ -113,6 +109,11 @@ export default function Signup() {
                         error={errors.confirmPassword}
                         helperText={errors.confirmPassword}
                     />
+                    <Typography variant="body2" color="error">
+                        {
+                            error && "Erreur lors de l'inscription"
+                        }
+                    </Typography>
                     <Button variant="contained" type="submit" color="primary">
                         S'inscrire
                     </Button>

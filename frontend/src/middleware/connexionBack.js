@@ -10,5 +10,5 @@ export const postData = async (url, data) => {
 
 export const getData = async (url) => {
     const response = await axios.get(`${baseUrl}/${url}`);
-    return response.data;
+    return response.user;
 }
