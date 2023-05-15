@@ -7,7 +7,7 @@ import {
     getCandidateById,
     updateCandidate
 } from "../middleware/candidate";
-import {registerUser} from "../middleware/authentication";
+import {registerUser, verifyUser} from "../middleware/authentication";
 
 
 
@@ -58,6 +58,7 @@ appRoute.delete('/candidates/:id', deleteCandidate);
  */
 
 appRoute.post('/register', registerUser);
+appRoute.post('/verify', verifyUser);
 
 
 export default appRoute;

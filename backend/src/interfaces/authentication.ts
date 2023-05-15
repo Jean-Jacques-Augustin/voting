@@ -1,6 +1,6 @@
 export interface Authentication {
-    num_vote: String;
-    password: String;
-    verif_code: String;
-    is_verified: Boolean;
+    num_vote: string;
+    password: string;
+    verif_code: string;
+    is_verified: boolean;
 }

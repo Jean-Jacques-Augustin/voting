@@ -3,7 +3,7 @@ import {useState} from "react";
 import CustomTextField from "../components/CustomTextField";
 import {baseUrl, postData} from "../middleware/connexionBack";
 import {useDispatch} from "react-redux";
-import {setEmail} from "../store/userSlice";
+import {setEmail, setNumVote} from "../store/userSlice";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -61,6 +61,7 @@ export default function Signup() {
 
         if (response.status === 200) {
             dispatch(setEmail(response.data.user.email));
+            dispatch(setNumVote(response.data.user.num_vote));
             navigate("/confirm");
         }
     };

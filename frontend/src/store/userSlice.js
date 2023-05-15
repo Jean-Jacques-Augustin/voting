@@ -10,6 +10,7 @@ const userSlice = createSlice({
         isLogged: false,
         role: "",
         email: "",
+        isVerified: false,
     },
     reducers: {
         setUsername: (state, action) => {
@@ -35,6 +36,10 @@ const userSlice = createSlice({
             state.email = action.payload;
         },
 
+        setVerified: (state, action) => {
+            state.isVerified = action.payload;
+        }
+
     },
 });
 
@@ -46,6 +51,7 @@ export const {
     setIsLogged,
     setRole,
     setEmail,
+    setVerified
 } = userSlice.actions;
 
 export default userSlice.reducer;
