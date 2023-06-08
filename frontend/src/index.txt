@@ -1,0 +1,16 @@
+
+JOURNAL QUOITIDIENT DU 8 JUIN 2023.
+
+Bonjour, ceci est mon activité d'hier;
+
+- J'ai fais le test sur le projet indemniflight; Apres plusieurs test j'ai fais le clos sur le ticket 166 et je me suis mis sur le ticket 167. Mais ce jours là, j'ai fais la lecture et la comprehension du code source du projet indemniflight surtout sur l'enovoie mail.
+
+- J'ai discuté avec le client concernant le projet indemniflight, il m'a démandé le source du crash de l'application et je lui ai expliquer que c'est un problème vien du SMSSender, car cette sms sender a besoin de sqlise pour fonctionner et il n'est pas installé sur mon local.
+
+- J'ai installé le projet MM23 sur mon application local, ensuite, je verrifier toutes les fonctionalité présente sur le projet. Et voir les regle de phpStan et phpCs.
+
+- J'ai participé au reuinion avec Sakil, Manasé et le deux autres développeur de cocolabs, notre reuinion a duré 1h30mn. Nous avons discuté sur le projet MM23, et on a discuté sur la bonne pratique de code et les regle de phpStan et phpCs. Le tech lead nous a expliqué l'arborecence du projet et les fonctionalité du projet.
+
+
+
+

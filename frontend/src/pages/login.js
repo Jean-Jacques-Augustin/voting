@@ -1,6 +1,7 @@
 import { Box, Button, Card } from "@mui/material";
 import { useState } from "react";
 import CustomTextField from "../components/CustomTextField";
+import {Link} from 'react-router-dom'
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -81,7 +82,13 @@ export default function Login() {
           <Button variant="contained" type="submit" color="primary">
             Se connecter
           </Button>
-          <Button variant="outlined" color="error">
+          <Button
+              variant="outlined"
+              color="error"
+              component={Link}
+              to="/signup"
+
+          >
             Créer un compte ?
           </Button>
         </form>

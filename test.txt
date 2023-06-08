@@ -1,0 +1,10 @@
+RAPPORT JOURNALIER DU 06/06/2023.
+
+Ajourd'hui, j'était sur le ticket 166 du projet indemniflight;
+
+- J'ai mofifier le code pour accepter le changement de nouveau template pour le mois de juin.
+- J'ai fait le condition pour que si la date est supérieur à 06/2023,on utilise le nouveau template, sinon on utilise l'ancien.
+- J'ai moderniser le l'input automatique dans google sheet lorsque le base donne de valeur pour le checkbox, l'input de la db fonctionne toujours.
+- J'ai fait le test à plusieur reprise pour voir si le code fonctionne bien.
+
+Ensuite, j'ai participé au call avec Sakil et les équipes du projet MM23 qui a durrée 1h30.

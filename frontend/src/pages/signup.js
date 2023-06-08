@@ -5,7 +5,7 @@ import {baseUrl, postData} from "../middleware/connexionBack";
 import {useDispatch} from "react-redux";
 import {setEmail, setNumVote} from "../store/userSlice";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 export default function Signup() {
@@ -66,53 +66,62 @@ export default function Signup() {
         }
     };
 
-    return (<Box
-        sx={{
-            display: "flex", justifyContent: "center", alignItems: "center", height: "100vh",
-        }}
-    >
-        <Card sx={{width: 400, padding: "2vh"}}>
-            <h1>Inscription</h1>
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: "flex", flexDirection: "column", gap: "1rem",
-                }}
-            >
-                <CustomTextField
-                    label="Numéro de vote"
-                    name="num_vote"
-                    type="text"
-                    value={formData.num_vote}
-                    onChange={handleInputChange}
-                    error={errors.num_vote}
-                    helperText={errors.num_vote}
-                />
-                <CustomTextField
-                    label="Mot de passe"
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    error={errors.password}
-                    helperText={errors.password}
-                />
-                <CustomTextField
-                    label="Confirmez votre mot de passe"
-                    name="confirmPassword"
-                    type="password"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    error={errors.confirmPassword}
-                    helperText={errors.confirmPassword}
-                />
-                <Typography variant="body2" color="error">
-                    {error && "Erreur lors de l'inscription"}
-                </Typography>
-                <Button variant="contained" type="submit" color="primary">
-                    S'inscrire
-                </Button>
-            </form>
-        </Card>
-    </Box>);
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+            }}
+        >
+            <Card sx={{width: 400, padding: "2vh"}}>
+                <h1>Inscription</h1>
+                <form
+                    onSubmit={handleSubmit}
+                    style={{
+                        display: "flex", flexDirection: "column", gap: "1rem",
+                    }}
+                >
+                    <CustomTextField
+                        label="Numéro de vote"
+                        name="num_vote"
+                        type="text"
+                        value={formData.num_vote}
+                        onChange={handleInputChange}
+                        error={errors.num_vote}
+                        helperText={errors.num_vote}
+                    />
+                    <CustomTextField
+                        label="Mot de passe"
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        error={errors.password}
+                        helperText={errors.password}
+                    />
+                    <CustomTextField
+                        label="Confirmez votre mot de passe"
+                        name="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        error={errors.confirmPassword}
+                        helperText={errors.confirmPassword}
+                    />
+                    <Typography variant="body2" color="error">
+                        {error && "Erreur lors de l'inscription"}
+                    </Typography>
+
+                    <Button variant="contained" type="submit" color="primary">
+                        S'inscrire
+                    </Button>
+                    <Typography variant="body2" color="textSecondary">
+                        Vous avez déjà un compte ? <Link to={"/login"}>Connectez-vous</Link>
+                    </Typography>
+                </form>
+            </Card>
+        </Box>
+    );
 }
