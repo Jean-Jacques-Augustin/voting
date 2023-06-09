@@ -8,6 +8,9 @@ import {
     updateCandidate
 } from "../middleware/candidate";
 import {registerUser, verifyUser} from "../middleware/authentication";
+import multer from "multer";
+import { fileFilter, fileStorage } from "../utils/multer";
+const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
 
 
 
@@ -38,7 +41,7 @@ appRoute.delete('/users/:id', deleteUser);
  */
 
 // Créer une candidature
-appRoute.post('/candidates', createCandidate);
+appRoute.post('/candidates', upload.single('image'), createCandidate);
 
 // Recuperate toutes les candidatures
 appRoute.get('/candidates', getAllCandidates);
