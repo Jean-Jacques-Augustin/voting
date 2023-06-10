@@ -1,100 +1,102 @@
-import React, { useState } from 'react';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typography } from '@mui/material';
-
-
-export const voters = [
-     {
-       id: 1,
-       name: 'John Doe',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 2,
-       name: 'Jane Smith',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 3,
-       name: 'Michael Johnson',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 4,
-       name: 'Emily Davis',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 5,
-       name: 'Daniel Wilson',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 6,
-       name: 'Olivia Martinez',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 7,
-       name: 'William Taylor',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     },
-     {
-       id: 8,
-       name: 'Sophia Anderson',
-       votes: 0,
-       parties: 'PDP',
-       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.'
-     }
-   ];
-   
-
+import React, { useEffect, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+} from "@mui/material";
+import { baseUrl } from "../middleware/connexionBack";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useDispatch } from "react-redux";
+import { addVote } from "../store/voteSlice";
+import { removeVote } from "../store/voteSlice";
 
 
 export const VoterBox = (props) => {
+  const [voted, setVoted] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleVoteClick = () => {
+    setVoted(!voted);
+  };
+
+  useEffect(() => {
+    console.log(voted);
+    if (voted) {
+      dispatch(addVote({
+        name: props.name,
+        id : props.id,
+        description: props.description,
+      }));
+    } else {
+      dispatch(removeVote(props.id));
+    }
+  }, [voted]);
+
   return (
-    <Card variant='outlined'>
-     <CardContent
+    <Card variant="outlined">
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { xs: "center", sm: "flex-start" },
+          p: 2,
+        }}
+      >
+        <Avatar
+          alt={props.name}
+          src={`${baseUrl}/${props.imageUrl}`}
           sx={{
-               display: 'flex',
-               flexDirection: 'column',
-               alignItems: 'center',
-               p: 2,
+            width: { xs: 100, sm: 150 },
+            height: { xs: 100, sm: 150 },
+            border: "2px solid #ffffff",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
           }}
-     >
-     <Avatar sx={{ bgcolor: 'success.main', width: 100, height: 100 }}>
-          {props.name[0]}
-     </Avatar>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
-               <Typography variant='h5' component='div'>
-                    {props.name}
-               </Typography>
-               <Typography variant='body2' component='div'>
-                    {props.parties}
-               </Typography>
-               <Typography variant='body2' component='div'>
-                    {props.description}
-               </Typography>
-          </Box>
-     </CardContent>
-     <CardActions>
-          <Checkbox checked={true} onChange={() => console.log('hello')}    >
-               Voter pour {props.parties}
-          </Checkbox>
-     </CardActions>
+        />
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            p: 2,
+          }}
+        >
+          <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
+            {props.name}
+          </Typography>
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{ mb: 1, color: "textSecondary" }}
+          >
+            {props.parties}
+          </Typography>
+          <Typography
+            variant="body2"
+            component="div"
+            sx={{ fontStyle: "italic" }}
+          >
+            {props.description}
+          </Typography>
+        </Box>
+      </CardContent>
+      <CardActions>
+        <Button
+          variant={voted ? "contained" : "outlined"}
+          color={voted ? "success" : "primary"}
+          fullWidth
+          onClick={handleVoteClick}
+          startIcon={voted ? <CheckCircleIcon /> : null}
+        >
+          {voted ? "Voted" : "Vote"}
+        </Button>
+      </CardActions>
     </Card>
   );
 };
