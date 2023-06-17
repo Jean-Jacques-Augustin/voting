@@ -4,6 +4,8 @@ import Authentication from "../models/authentication";
 import bcrypt from "bcrypt";
 import generateVerificationCode from "../utils/codeGen";
 import SignupEmail from "../utils/template/sendCode";
+import {jwt_key} from "../utils/configuration";
+import jwt from 'jsonwebtoken'
 
 export async function findUserByNumVote(numVote: string) {
     return User.findOne({num_vote: numVote});
@@ -146,8 +148,23 @@ export async function loginUser(req: Request, res: Response) {
             });
         }
 
+        const information = {
+            name: user.name,
+            numvote: user.numvote,
+            email: user.email,
+            role: user.role,
+        }
+
+        if (!information) {
+            return res.status(500).json("Erreur du serveur, veuillez contacter les admins")
+        }
+        // set token.
+
+        const token = jwt.sign({information}, jwt_key);
+
         return res.status(200).json({
             message: "Utilisateur connecté",
+            token: token
         });
     } catch (error) {
         console.error(error);

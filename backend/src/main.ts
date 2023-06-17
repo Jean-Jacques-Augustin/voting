@@ -13,7 +13,7 @@ const app: Express = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
-app.use('/api', appRoute);;
+app.use('/api', appRoute);
 app.use('/api/img', express.static('public/images'));
 ConnexionDB();
 
