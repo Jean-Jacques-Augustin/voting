@@ -7,9 +7,10 @@ import {
     getCandidateById,
     updateCandidate
 } from "../middleware/candidate";
-import {registerUser, verifyUser} from "../middleware/authentication";
+import {loginUser, registerUser, verifyUser} from "../middleware/authentication";
 import multer from "multer";
 import { fileFilter, fileStorage } from "../utils/multer";
+import authMiddleware, { Role } from "../security/isAuth";
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
 
 
@@ -20,39 +21,29 @@ const appRoute = express.Router();
  * User routes
  */
 
-// Route pour récupérer tous les utilisateurs
-appRoute.get('/users', getAllUsers);
+appRoute.get('/users', authMiddleware([Role.Admin, Role.User]), getAllUsers);
 
-// Route pour créer un nouvel utilisateur
 appRoute.post('/users', createUser);
 
-// Route pour récupérer un utilisateur par son ID
-appRoute.get('/users/:id', getUserById);
+appRoute.get('/users/:id', authMiddleware([Role.Admin, Role.User]), getUserById);
 
-// Route pour mettre à jour un utilisateur existant
-appRoute.put('/users/:id', updateUser);
+appRoute.put('/users/:id',authMiddleware([Role.Admin, Role.User]),  updateUser);
 
-// Route pour supprimer un utilisateur existant
-appRoute.delete('/users/:id', deleteUser);
+appRoute.delete('/users/:id',authMiddleware([Role.Admin, Role.User]), deleteUser);
 
 
 /**
  * Candidate routes
  */
 
-// Créer une candidature
 appRoute.post('/candidates', upload.single('image'), createCandidate);
 
-// Recuperate toutes les candidatures
 appRoute.get('/candidates', getAllCandidates);
 
-// Récupérer une candidature par son ID
 appRoute.get('/candidates/:id', getCandidateById);
 
-// Mettre à jour une candidature existante
 appRoute.put('/candidates/:id', updateCandidate);
 
-// Supprimer une candidature existante
 appRoute.delete('/candidates/:id', deleteCandidate);
 
 
@@ -62,6 +53,7 @@ appRoute.delete('/candidates/:id', deleteCandidate);
 
 appRoute.post('/register', registerUser);
 appRoute.post('/verify', verifyUser);
+appRoute.post('/login', loginUser);
 
 
 export default appRoute;

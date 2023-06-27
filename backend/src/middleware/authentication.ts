@@ -148,11 +148,18 @@ export async function loginUser(req: Request, res: Response) {
             });
         }
 
+        if(!auth.is_verified) {
+            return res.status(400).json({
+                message: "Utilisateur non vérifié",
+            });
+        }
+
         const information = {
             name: user.name,
-            numvote: user.numvote,
+            numvote: user.num_vote,
             email: user.email,
             role: user.role,
+            is_verified: auth.is_verified
         }
 
         if (!information) {
@@ -164,6 +171,7 @@ export async function loginUser(req: Request, res: Response) {
 
         return res.status(200).json({
             message: "Utilisateur connecté",
+            user: information,
             token: token
         });
     } catch (error) {

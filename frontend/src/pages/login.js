@@ -1,7 +1,20 @@
 import { Box, Button, Card } from "@mui/material";
 import { useState } from "react";
 import CustomTextField from "../components/CustomTextField";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { baseUrl } from "../middleware/connexionBack";
+import { useDispatch } from "react-redux";
+import {
+  setEmail,
+  setIsLogged,
+  setNumVote,
+  setRole,
+  setToken,
+  setUsername,
+  setVerified,
+} from "../store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -22,6 +35,36 @@ export default function Login() {
     }));
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const sendLoginRequest = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/login`, {
+        num_vote: formData.num_vote,
+        password: formData.password,
+      });
+
+      console.log(response);
+
+      if (response.data.token) {
+        const { token, user } = response.data;
+        dispatch(setToken(token));
+        dispatch(setUsername(user.name));
+        dispatch(setRole(user.role));
+        dispatch(setNumVote(user.numvote));
+        dispatch(setIsLogged(true));
+        dispatch(setEmail(user.email));
+        dispatch(setVerified(true));
+        navigate("/voter");
+      } else {
+        setErrors("Une erreur s'est produite lors de la connexion.");
+      }
+    } catch (error) {
+      setErrors("Une erreur s'est produite lors de la connexion.");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -38,8 +81,7 @@ export default function Login() {
       setErrors(formErrors);
       return;
     }
-
-    console.log(formData);
+    sendLoginRequest();
   };
 
   return (
@@ -83,11 +125,10 @@ export default function Login() {
             Se connecter
           </Button>
           <Button
-              variant="outlined"
-              color="error"
-              component={Link}
-              to="/signup"
-
+            variant="outlined"
+            color="error"
+            component={Link}
+            to="/signup"
           >
             Créer un compte ?
           </Button>

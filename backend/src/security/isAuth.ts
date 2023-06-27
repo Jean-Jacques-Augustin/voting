@@ -1,41 +1,58 @@
-// Importez les dépendances nécessaires
-import jwt from 'jsonwebtoken';
-import {jwt_key} from "../utils/configuration";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { jwt_key } from "../utils/configuration";
+import { NextFunction, Request, Response } from "express";
 
-// Définissez votre enum Role avec les rôles possibles
-enum Role {
-    Admin = 'admin',
-    User = 'user',
+export enum Role {
+  Admin = "admin",
+  User = "user",
 }
 
-// Définissez votre fonction de middleware d'authentification
+interface DecodedToken extends JwtPayload {
+  information: {
+    name: string;
+    numvote: string;
+    email: string;
+    role: Role;
+    is_verified: boolean;
+  };
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: DecodedToken;
+}
+
 const authMiddleware = (allowedRoles: Role[]) => {
-    return (req, res, next) => {
-        const token = req.header('Authorization');
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const token = req.header("Authorization");
 
-        if (!token)
-            // Le token est manquant
-            return res.status(401).json({message: 'Missing token'});
+    if (!token)
+      return res.status(401).json({ message: "Missing token" });
 
+    try {
+      const decodedToken = jwt.verify(
+        token,
+        jwt_key
+      ) as DecodedToken;
 
-        try {
-            const decodedToken = jwt.verify(token, jwt_key);
+      const userRole: Role = decodedToken?.information.role;
 
+      if(!decodedToken?.information.is_verified) {
+        return res.status(400).json({
+          message: "Utilisateur non vérifié",
+        });
+      }
 
-            const userRole: Role = decodedToken.role;
+      if (!allowedRoles.includes(userRole)) {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
 
-            if (!allowedRoles.includes(userRole)) {
-                return res.status(403).json({message: 'Unauthorized'});
-            }
+      req.user = decodedToken;
 
-            req.user = decodedToken;
-
-            next();
-        } catch (error) {
-            // Le token est invalide ou expiré
-            return res.status(401).json({message: 'Invalid token'});
-        }
-    };
+      next();
+    } catch (error) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+  };
 };
 
 export default authMiddleware;
