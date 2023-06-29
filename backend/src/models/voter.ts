@@ -3,7 +3,7 @@ import {Voter} from "../interfaces/voter";
 
 
 const voterSchema = new Schema({
-    userId: {
+    num_vote: {
         type: String,
         required: true,
     },

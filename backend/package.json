@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon",
     "start": "nodemon src/index.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "alefa": "pm2 start ecosystem.config.cjs --env production",
+    "stop": "pm2 stop ecosystem.config.cjs --env production"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.2",

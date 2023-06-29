@@ -30,11 +30,13 @@ export const getVoterById = async (req: Request, res: Response, next: NextFuncti
 // POST /voters
 export const createVoter = async (req: Request, res: Response) => {
     try {
-        const { userId, candidateId } = req.body;
-        const voter = await Voter.create({ userId, candidateId });
+        const { num_vote, candidateId } = req.body;
+        const voter = await Voter.create({ num_vote, candidateId });
         res.status(201).json(voter);
+        console.log(voter);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create voter' });
+        console.log(error);
+        res.status(500).json({ error: error});
     }
 };
 

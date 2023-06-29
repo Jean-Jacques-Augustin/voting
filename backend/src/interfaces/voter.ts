@@ -1,5 +1,5 @@
 export interface Voter {
-    userId: string;
+    num_vote: string;
     candidateId: string[];
     date: Date;
 }
