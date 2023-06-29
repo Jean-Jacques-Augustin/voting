@@ -1,14 +1,14 @@
 {
   "name": "voting-api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
     "start": "nodemon src/index.ts",
     "build": "tsc -p .",
-    "alefa": "pm2 start ecosystem.config.cjs --env production",
-    "stop": "pm2 stop ecosystem.config.cjs --env production"
+    "alefa": "pm2 start ecosystem.config.js --env production",
+    "stop": "pm2 stop ecosystem.config.js --env production"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.2",
