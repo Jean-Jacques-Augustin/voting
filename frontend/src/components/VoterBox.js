@@ -13,6 +13,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 const VoterBox = (props) => {
   const [voted, setVoted] = useState(false);
 
+  // add the vote selected to the store
+
+
+
   const handleVoteClick = () => {
     setVoted(!voted);
   };

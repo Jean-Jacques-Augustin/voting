@@ -3,10 +3,7 @@ import express from "express";
 import ConnexionDB from "./db/connexion";
 import appRoute from "./routes/routes";
 
-
 const cors = require('cors');
-
-
 
 const app: Express = express();
 

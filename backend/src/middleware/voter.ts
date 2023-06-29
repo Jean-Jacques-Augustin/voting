@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import VoterModel from '../models/voter';
+import Voter from "../models/voter";
 
 // GET /voters
 export const getVoters = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,13 +28,13 @@ export const getVoterById = async (req: Request, res: Response, next: NextFuncti
 };
 
 // POST /voters
-export const createVoter = async (req: Request, res: Response, next: NextFunction) => {
-    const {userId, candidateId} = req.body;
+export const createVoter = async (req: Request, res: Response) => {
     try {
-        const voter: Voter = await VoterModel.create({userId, candidateId});
+        const { userId, candidateId } = req.body;
+        const voter = await Voter.create({ userId, candidateId });
         res.status(201).json(voter);
     } catch (error) {
-        next(error);
+        res.status(500).json({ error: 'Failed to create voter' });
     }
 };
 
