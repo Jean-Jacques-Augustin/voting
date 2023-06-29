@@ -1,0 +1,9 @@
+{
+	"name": "my-app",
+	"script": "dist/app.js",
+	"args": ["--port", "5002"],
+	"watch": true,
+	"ignore_watch": ["node_modules", "logs"],
+	"exec_mode": "cluster",
+	"instances": "max"
+}
