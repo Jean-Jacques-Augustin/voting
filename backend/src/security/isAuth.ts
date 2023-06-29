@@ -45,9 +45,7 @@ const authMiddleware = (allowedRoles: Role[]) => {
       if (!allowedRoles.includes(userRole)) {
         return res.status(403).json({ message: "Unauthorized" });
       }
-
       req.user = decodedToken;
-
       next();
     } catch (error) {
       return res.status(401).json({ message: "Invalid token" });

@@ -43,12 +43,12 @@ export default function Homepage() {
                     </Typography>
 
                     <img alt="Image voting"
-                        style={{
-                            width: "100%",
-                            height: "auto",
-                            objectFit: "cover",
-                        }}
-                    src={votingImage}/>
+                         style={{
+                             width: "100%",
+                             height: "auto",
+                             objectFit: "cover",
+                         }}
+                         src={votingImage}/>
                     <br/>
                     <div
                         style={{

@@ -29,7 +29,7 @@ export default function Users() {
                 console.error(error);
             }
         };
-        fetchData()
+        fetchData().then(r => console.log('test'))
 
     }, [open])
 

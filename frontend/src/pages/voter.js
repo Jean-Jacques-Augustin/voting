@@ -1,112 +1,111 @@
 import {
-  Typography,
-  Grid,
-  Container,
-  Button,
-  Box,
-  AppBar,
-  Toolbar,
+    Typography,
+    Grid,
+    Container,
+    Box,
+    AppBar,
+    Toolbar, Button,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, {useEffect, useCallback} from "react";
+import {useSelector, useDispatch} from "react-redux";
 import VoterBox from "./../components/VoterBox";
-import { getData } from "./../middleware/connexionBack";
-import { useSelector } from "react-redux";
 import NavControl from "./../components/NavControl";
+import {getData} from "../middleware/connexionBack";
 
 export default function Voter() {
-  const [voters, setVoters] = React.useState([]);
+    const [voters, setVoters] = React.useState([]);
+    const vote = useSelector((state) => state);
+    const dispatch = useDispatch();
 
-  // get the candidates states from the store
-  const vote = useSelector((state) => state);
+    const fetchData = useCallback(async () => {
+        try {
+            const userData = await getData("users");
+            const candidateData = await getData("candidates");
 
-  console.log(vote);
-  const fetchData = async () => {
-    try {
-      const userData = await getData("users");
-      const candidateData = await getData("candidates");
+            const combinedData = candidateData.map((candidate) => {
+                const matchingUser = userData.find(
+                    (user) => user._id === candidate.userId,
+                );
+                return {
+                    ...matchingUser,
+                    ...candidate,
+                    _id: candidate._id,
+                };
+            });
 
-      // Combine user and candidate data based on userId
-      const combinedData = candidateData.map((candidate) => {
-        const matchingUser = userData.find(
-          (user) => user._id === candidate.userId
-        );
-        return {
-          ...matchingUser,
-          ...candidate,
-          _id: candidate._id,
-        };
-      });
+            setVoters(combinedData);
+        } catch (error) {
+            console.error(error);
+        }
+    }, [vote.token, dispatch]);
 
-      setVoters(combinedData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    useEffect(() => {
+        fetchData().then(r => console.log(r));
+    }, [fetchData]);
 
-  // Get if the user data from the store
-  const user = useSelector((state) => state.user);
+    return (
+        <Box>
+            <AppBar color="inherit">
+                <Toolbar>
+                    <Container>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                p: 2,
+                            }}
+                        >
+                            <Typography variant="h6" component="div">
+                                Vote électronique > Voter pour un candidat
+                            </Typography>
+                            <NavControl/>
+                        </Box>
+                    </Container>
+                </Toolbar>
+            </AppBar>
+            <Container>
+                <Toolbar/>
+                <div>
+                    <Grid
+                        container
+                        spacing={2}
+                        justifyContent="start"
+                        alignItems="center"
+                        sx={{mt: "2rem"}}
+                        padding={2}
+                    >
+                        {voters.map((voter, key) => (
+                            <Grid key={key} item xs={12} sm={6} md={6}>
+                                <VoterBox
+                                    name={voter.name}
+                                    parties={voter.party}
+                                    description={voter.description}
+                                    imageUrl={voter.imageUrl}
+                                    id={voter._id}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
 
-  useEffect(() => {
-    fetchData();
-  }, [voters]);
-
-  return (
-    <Box>
-      <AppBar color="inherit">
-        <Toolbar>
-          <Container>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 2,
-              }}
-            >
-              <Typography variant="h5" component="div">
-                Voter pour un candidat
-              </Typography>
-              <NavControl />
-            </Box>
-          </Container>
-        </Toolbar>
-      </AppBar>
-      <Container>
-        <Toolbar />
-        <div>
-          <Grid
-            container
-            spacing={2}
-            justifyContent="start"
-            alignItems="center"
-            sx={{ mt: "2rem" }}
-            padding={2}
-          >
-            {voters.map((voter, key) => (
-              <Grid key={key} item xs={12} sm={6} md={6}>
-                <VoterBox
-                  name={voter.name}
-                  parties={voter.party}
-                  description={voter.description}
-                  imageUrl={voter.imageUrl}
-                  id={voter._id}
-                />
-              </Grid>
-            ))}
-          </Grid>
-
-          <Container
-            sx={{
-              float: "right",
-              position: "fixed",
-              bottom: "2rem",
-            }}
-          >
-            Valider
-          </Container>
-        </div>
-      </Container>
-    </Box>
-  );
+                    <Container
+                        sx={{
+                            float: "right",
+                            position: "fixed",
+                            bottom: "2rem",
+                        }}
+                    >
+                        <Button
+                            variant={'contained'}
+                            size={"large"}
+                            fullWidth
+                        >
+                            Voter
+                        </Button>
+                    </Container>
+                </div>
+            </Container>
+        </Box>
+    );
 }

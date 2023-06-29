@@ -39,7 +39,6 @@ export async function getCandidateById(req: Request, res: Response, next: NextFu
  */
 export async function createCandidate(req: Request, res: Response) {
     try {
-        // uploid images
         const {party, userId, description} = req.body;
         const imageUrl = `img/${req.file?.filename}`;
 

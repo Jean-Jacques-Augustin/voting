@@ -9,11 +9,10 @@ import {
 } from "../middleware/candidate";
 import {loginUser, registerUser, verifyUser} from "../middleware/authentication";
 import multer from "multer";
-import { fileFilter, fileStorage } from "../utils/multer";
-import authMiddleware, { Role } from "../security/isAuth";
-const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
+import {fileFilter, fileStorage} from "../utils/multer";
+import authMiddleware, {Role} from "../security/isAuth";
 
-
+const upload = multer({storage: fileStorage, fileFilter: fileFilter});
 
 const appRoute = express.Router();
 
@@ -21,15 +20,15 @@ const appRoute = express.Router();
  * User routes
  */
 
-appRoute.get('/users', authMiddleware([Role.Admin, Role.User]), getAllUsers);
+appRoute.get('/users', getAllUsers);
 
 appRoute.post('/users', createUser);
 
-appRoute.get('/users/:id', authMiddleware([Role.Admin, Role.User]), getUserById);
+appRoute.get('/users/:id', getUserById);
 
-appRoute.put('/users/:id',authMiddleware([Role.Admin, Role.User]),  updateUser);
+appRoute.put('/users/:id', updateUser);
 
-appRoute.delete('/users/:id',authMiddleware([Role.Admin, Role.User]), deleteUser);
+appRoute.delete('/users/:id', deleteUser);
 
 
 /**
@@ -48,9 +47,8 @@ appRoute.delete('/candidates/:id', deleteCandidate);
 
 
 /**
- * Authentication routes
+ * Authentication routes || n'a pas besoin de role
  */
-
 appRoute.post('/register', registerUser);
 appRoute.post('/verify', verifyUser);
 appRoute.post('/login', loginUser);
