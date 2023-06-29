@@ -5,7 +5,7 @@ import React, {useEffect, useCallback} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import VoterBox from "./../components/VoterBox";
 import NavControl from "./../components/NavControl";
-import {getData} from "../middleware/connexionBack";
+import {baseUrl, getData} from "../middleware/connexionBack";
 
 export default function Voter() {
     const [voters, setVoters] = React.useState([]);
@@ -30,9 +30,38 @@ export default function Voter() {
         }
     }, [vote.token, dispatch]);
 
+
     useEffect(() => {
         fetchData().then(r => console.log(r));
     }, [fetchData]);
+
+    // Get the vote data 
+    const votes = useSelector((state) => state.vote);
+    const num_vote = useSelector((state) => state.user.num_vote);
+    console.log(votes);
+
+
+    const sendVote = async () => {
+        const voteData = {
+          num_vote: num_vote,
+          candidateId: votes.votes,
+        };
+      
+        const response = await fetch(`${baseUrl}/createVote`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${vote.token}`,
+          },
+          body: JSON.stringify(voteData),
+        });
+      
+        const data = await response.json();
+        console.log(data);
+      };
+
+
+
 
     return (<Box>
         <AppBar color="inherit">
@@ -48,7 +77,7 @@ export default function Voter() {
                         }}
                     >
                         <Typography variant="h6" component="div">
-                            Vote électronique > Voter pour un candidat
+                            Vote électronique {">"} Voter pour un candidat
                         </Typography>
                         <NavControl/>
                     </Box>
@@ -72,7 +101,7 @@ export default function Voter() {
                             parties={voter.party}
                             description={voter.description}
                             imageUrl={voter.imageUrl}
-                            id={voter._id}
+                            UID={voter._id}
                         />
                     </Grid>))}
                 </Grid>
@@ -86,6 +115,7 @@ export default function Voter() {
                         variant={'contained'}
                         size={"large"}
                         fullWidth
+                        onClick={sendVote}
                     >
                         Voter
                     </Button>

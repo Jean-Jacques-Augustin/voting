@@ -1,29 +1,28 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+	votes: {},
+};
 
 const voteSlice = createSlice({
-    name: "vote",
-    initialState: {
-        votes: [],
-    },
-    reducers: {
-        addVote: (state, action) => {
-            const existingVote = state.votes.find((vote) => vote.id === action.payload.id);
-            if (!existingVote) {
-                state.votes.push(action.payload);
-            }
-        },
-        removeVote: (state, action) => {
-            const index = state.votes.findIndex((vote) => vote.id === action.payload);
-            if (index !== -1) {
-                state.votes.splice(index, 1);
-            }
-        },
-        selectVoteById: (state, action) => {
-            return state.votes.find((vote) => vote.id === action.payload);
-        }
-    },
+	name: "vote",
+	initialState,
+	reducers: {
+		addVote: (state, action) => {
+			const candidateId = action.payload;
+			state.votes[candidateId] = (state.votes[candidateId] || 0) + 1;
+		},
+		removeVote: (state, action) => {
+			const candidateId = action.payload;
+			if (state.votes[candidateId]) {
+				state.votes[candidateId] -= 1;
+				if (state.votes[candidateId] === 0) {
+					delete state.votes[candidateId];
+				}
+			}
+		},
+	},
 });
 
-export const {addVote, removeVote, selectVoteById} = voteSlice.actions;
-
+export const { addVote, removeVote } = voteSlice.actions;
 export default voteSlice.reducer;
