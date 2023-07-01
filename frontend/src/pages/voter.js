@@ -78,7 +78,7 @@ export default function Voter() {
 			<Container>
 				<Toolbar />
 
-				{voters ? (
+				{voters > 0 ? (
 					<div>
 						<Grid
 							container
@@ -111,9 +111,13 @@ export default function Voter() {
 
 						<Container
 							sx={{
-								float: "right",
 								position: "fixed",
 								bottom: "2rem",
+								left: "50%",
+								transform: "translateX(-50%)",
+								textAlign: "center",
+								maxWidth: "100%",
+								minWidth: "400px",
 							}}
 						>
 							<Button
@@ -128,17 +132,18 @@ export default function Voter() {
 					</div>
 				) : (
 					<div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            height: "100vh",
-                        }}
-                    >
-                        <Typography variant={"h3"}>
-                            Aucun candidat n'est disponible pour le moment. Veuillez réessayer plus tard.
-                        </Typography>
-                    </div>
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							height: "80vh",
+						}}
+					>
+						<Typography variant={"h5"}>
+							Aucun candidat n'est disponible pour le
+							moment. Veuillez réessayer plus tard.
+						</Typography>
+					</div>
 				)}
 			</Container>
 		</Box>
