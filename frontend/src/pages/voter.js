@@ -1,111 +1,146 @@
 import {
-    Typography, Grid, Container, Box, AppBar, Toolbar, Button,
+	Typography,
+	Grid,
+	Container,
+	Box,
+	AppBar,
+	Toolbar,
+	Button,
 } from "@mui/material";
-import React, {useEffect, useCallback} from "react";
-import {useSelector, useDispatch} from "react-redux";
+import React, { useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import VoterBox from "./../components/VoterBox";
 import NavControl from "./../components/NavControl";
-import {baseUrl, getData} from "../middleware/connexionBack";
-
+import { baseUrl, getData } from "../middleware/connexionBack";
 
 export default function Voter() {
-    const [voters, setVoters] = React.useState([]);
-    const vote = useSelector((state) => state);
-    const dispatch = useDispatch();
-    const token = useSelector((state) => state.user.token);
+	const [voters, setVoters] = React.useState([]);
+	const vote = useSelector((state) => state);
+	const dispatch = useDispatch();
+	const token = useSelector((state) => state.user.token);
 
-    const fetchData = useCallback(async () => {
-        try {
-            const userData = await getData("users", token);
-            const candidateData = await getData("candidates", token);
+	const fetchData = useCallback(async () => {
+		try {
+			const userData = await getData("users", token);
+			const candidateData = await getData("candidates", token);
 
-            const combinedData = candidateData.map((candidate) => {
-                const matchingUser = userData.find((user) => user._id === candidate.userId,);
-                return {
-                    ...matchingUser, ...candidate, _id: candidate._id,
-                };
-            });
+			const combinedData = candidateData.map((candidate) => {
+				const matchingUser = userData.find(
+					(user) => user._id === candidate.userId,
+				);
+				return {
+					...matchingUser,
+					...candidate,
+					_id: candidate._id,
+				};
+			});
 
-            setVoters(combinedData);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [vote.token, dispatch]);
+			setVoters(combinedData);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [vote.token, dispatch]);
 
+	useEffect(() => {
+		fetchData().then((r) => console.log(r));
+	}, [fetchData]);
 
-    useEffect(() => {
-        fetchData().then(r => console.log(r));
-    }, [fetchData]);
+	// Get the vote data
+	const votes = useSelector((state) => state.vote);
+	const num_vote = useSelector((state) => state.user.num_vote);
+	console.log(votes);
 
-    // Get the vote data 
-    const votes = useSelector((state) => state.vote);
-    const num_vote = useSelector((state) => state.user.num_vote);
-    console.log(votes);
+	const sendVote = async () => {
+		const candidateIdArray = Object.keys(votes.votes);
 
+		const voteData = {
+			num_vote: num_vote,
+			candidateId: candidateIdArray,
+		};
 
-    const sendVote = async () => {
+		console.log(voteData);
 
-        const candidateIdArray = Object.keys(votes.votes);
+		const response = await fetch(`${baseUrl}/createVote`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${vote.token}`,
+			},
+			body: JSON.stringify(voteData),
+		});
 
-        const voteData = {
-          num_vote: num_vote,
-          candidateId: candidateIdArray,
-        };
+		const data = await response.json();
+		console.log(data);
+	};
 
-        console.log(voteData);
-      
-        const response = await fetch(`${baseUrl}/createVote`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${vote.token}`,
-          },
-          body: JSON.stringify(voteData),
-        });
-      
-        const data = await response.json();
-        console.log(data);
-      };
+	return (
+		<Box>
+			<Container>
+				<Toolbar />
 
+				{voters ? (
+					<div>
+						<Grid
+							container
+							spacing={2}
+							justifyContent="start"
+							alignItems="center"
+							sx={{ mt: "2rem" }}
+							padding={2}
+						>
+							{voters.map((voter, key) => (
+								<Grid
+									key={key}
+									item
+									xs={12}
+									sm={6}
+									md={6}
+								>
+									<VoterBox
+										name={voter.name}
+										parties={voter.party}
+										description={
+											voter.description
+										}
+										imageUrl={voter.imageUrl}
+										UID={voter._id}
+									/>
+								</Grid>
+							))}
+						</Grid>
 
-    return (<Box>
-        <Container>
-            <Toolbar/>
-            <div>
-                <Grid
-                    container
-                    spacing={2}
-                    justifyContent="start"
-                    alignItems="center"
-                    sx={{mt: "2rem"}}
-                    padding={2}
-                >
-                    {voters.map((voter, key) => (<Grid key={key} item xs={12} sm={6} md={6}>
-                        <VoterBox
-                            name={voter.name}
-                            parties={voter.party}
-                            description={voter.description}
-                            imageUrl={voter.imageUrl}
-                            UID={voter._id}
-                        />
-                    </Grid>))}
-                </Grid>
-
-                <Container
-                    sx={{
-                        float: "right", position: "fixed", bottom: "2rem",
-                    }}
-                >
-                    <Button
-                        variant={'contained'}
-                        size={"large"}
-                        fullWidth
-                        onClick={sendVote}
+						<Container
+							sx={{
+								float: "right",
+								position: "fixed",
+								bottom: "2rem",
+							}}
+						>
+							<Button
+								variant={"contained"}
+								size={"large"}
+								fullWidth
+								onClick={sendVote}
+							>
+								Voter
+							</Button>
+						</Container>
+					</div>
+				) : (
+					<div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100vh",
+                        }}
                     >
-                        Voter
-                    </Button>
-                </Container>
-            </div>
-        </Container>
-    </Box>);
+                        <Typography variant={"h3"}>
+                            Aucun candidat n'est disponible pour le moment. Veuillez réessayer plus tard.
+                        </Typography>
+                    </div>
+				)}
+			</Container>
+		</Box>
+	);
 }

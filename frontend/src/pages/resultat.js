@@ -106,7 +106,7 @@ export default function Resultat() {
 					</div>
 				) : (
 					<Typography variant="h5" marginBottom="1rem">
-						Aucun résultat disponible
+						Aucun résultat disponible. Veuillez réessayer plus tard.
 					</Typography>
 				)}
 			</Container>
