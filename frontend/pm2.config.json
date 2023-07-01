@@ -1,0 +1,9 @@
+{
+     "name": "voting-front",
+     "script": "serve",
+     "args": ["-s", "build"],
+     "env": {
+       "PORT": 3002,
+       "CI": "false"
+     }
+   }
