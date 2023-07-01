@@ -37,7 +37,7 @@ function App() {
 				<Route path="/signup" element={<Signup />} />
 				<Route
 					path="/confirm"
-					element={isLogged ? <Confirm /> : <Unauthorized />}
+					element={<Confirm />}
 				/>
 				<Route
 					path="/voter"
