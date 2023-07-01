@@ -1,9 +1,10 @@
 {
-     "name": "voting-front",
-     "script": "serve",
-     "args": ["-s", "build"],
-     "env": {
-       "PORT": 3002,
-       "CI": "false"
-     }
-   }
+	"apps": [
+		{
+			"name": "voting app",
+			"script": "npx",
+			"interpreter": "none",
+			"args": "serve -p 8443 -T"
+		}
+	]
+}
