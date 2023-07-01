@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 
 let persistor = persistStore(store);
 
@@ -27,4 +28,6 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
+serviceWorkerRegistration.register()
 reportWebVitals();

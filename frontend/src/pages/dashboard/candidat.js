@@ -13,18 +13,21 @@ import {getData} from "../../middleware/connexionBack";
 import Typography from "@mui/material/Typography";
 import AddCandidat from "../../components/candidat/addCandidat";
 import {useCallback, useEffect} from "react";
+import {useSelector} from "react-redux";
 
 
 export default function Candidat() {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState('Dione');
     const [data, setData] = React.useState([]);
+    const token = useSelector((state) => state.user.token);
 
 
     const fetchData = useCallback(async () => {
         try {
-            const userData = await getData('users');
-            const candidateData = await getData('candidates');
+            const userData = await getData('users', token);
+            const candidateData = await getData('candidates', token);
+            
     
             // Combine user and candidate data based on userId
             const combinedData = candidateData.map(candidate => {

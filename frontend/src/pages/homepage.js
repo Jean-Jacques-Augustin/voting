@@ -19,28 +19,7 @@ import { Link } from "react-router-dom";
 export default function Homepage() {
 	return (
 		<Box sx={{ flexGrow: 1 }}>
-			<AppBar position="static" color="inherit" elevation={1}>
-				<Container>
-					<Toolbar
-						sx={{
-							display: "flex",
-							justifyContent: "space-between",
-						}}
-					>
-						<Typography variant="h6" component="div">
-							Voting App
-						</Typography>
-						<Button
-							color="primary"
-							variant="outlined"
-							component={Link}
-							to="/login"
-						>
-							Connexion
-						</Button>
-					</Toolbar>
-				</Container>
-			</AppBar>
+			<Toolbar/>
 			<Container sx={{ mt: "2rem", mb: "2rem", minHeight: "80vh" }}>
 				<Grid container justifyContent="center" spacing={2}>
 					<Typography

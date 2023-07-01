@@ -11,6 +11,7 @@ import { AppBar, Button, Container, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Unauthorized from "./pages/Unauthorized";
+import NavigationBar from "./components/NavigationBar";
 
 function App() {
 	const isLogged = useSelector((state) => state.user.isLogged);
@@ -25,7 +26,11 @@ function App() {
 	};
 
 	return (
-		<div className="App">
+		<div className="App"
+			
+		>
+			<NavigationBar/>
+
 			<Routes>
 				<Route path="/" element={<Homepage />} />
 				<Route path="/login" element={<Login />} />

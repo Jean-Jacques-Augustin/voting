@@ -7,15 +7,17 @@ import VoterBox from "./../components/VoterBox";
 import NavControl from "./../components/NavControl";
 import {baseUrl, getData} from "../middleware/connexionBack";
 
+
 export default function Voter() {
     const [voters, setVoters] = React.useState([]);
     const vote = useSelector((state) => state);
     const dispatch = useDispatch();
+    const token = useSelector((state) => state.user.token);
 
     const fetchData = useCallback(async () => {
         try {
-            const userData = await getData("users");
-            const candidateData = await getData("candidates");
+            const userData = await getData("users", token);
+            const candidateData = await getData("candidates", token);
 
             const combinedData = candidateData.map((candidate) => {
                 const matchingUser = userData.find((user) => user._id === candidate.userId,);
@@ -67,26 +69,6 @@ export default function Voter() {
 
 
     return (<Box>
-        <AppBar color="inherit">
-            <Toolbar>
-                <Container>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            p: 2,
-                        }}
-                    >
-                        <Typography variant="h6" component="div">
-                            Vote électronique {">"} Voter pour un candidat
-                        </Typography>
-                        <NavControl/>
-                    </Box>
-                </Container>
-            </Toolbar>
-        </AppBar>
         <Container>
             <Toolbar/>
             <div>

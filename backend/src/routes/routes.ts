@@ -11,6 +11,7 @@ import {loginUser, registerUser, verifyUser} from "../middleware/authentication"
 import multer from "multer";
 import {fileFilter, fileStorage} from "../utils/multer";
 import {ComputeVoter, createVoter, getVoters} from "../middleware/voter";
+import authMiddleware, { Role } from "../security/isAuth";
 
 const upload = multer({storage: fileStorage, fileFilter: fileFilter});
 
@@ -20,22 +21,22 @@ const appRoute = express.Router();
  * User routes
  */
 
-appRoute.get('/users', getAllUsers);
+appRoute.get('/users' , authMiddleware([Role.Admin]), getAllUsers);
 
-appRoute.post('/users', createUser);
+appRoute.post('/users', authMiddleware([Role.Admin]),  createUser);
 
-appRoute.get('/users/:id', getUserById);
+appRoute.get('/users/:id',authMiddleware([Role.Admin]),  getUserById);
 
-appRoute.put('/users/:id', updateUser);
+appRoute.put('/users/:id',authMiddleware([Role.Admin]),  updateUser);
 
-appRoute.delete('/users/:id', deleteUser);
+appRoute.delete('/users/:id',authMiddleware([Role.Admin]),  deleteUser);
 
 
 /**
  * Candidate routes
  */
 
-appRoute.post('/candidates', upload.single('image'), createCandidate);
+appRoute.post('/candidates', upload.single('image'),authMiddleware([Role.Admin]),  createCandidate);
 
 appRoute.get('/candidates', getAllCandidates);
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseUrl = "http://localhost:5002/api";
+export const baseUrl = "https://app1.fordisco-ius.com/api";
 
 export const postData = async (url, data, token) => {
     try {
@@ -20,6 +20,7 @@ export const getData = async (url, token) => {
     try {
         const config = {
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
         };
@@ -27,5 +28,6 @@ export const getData = async (url, token) => {
         return response.data;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 };

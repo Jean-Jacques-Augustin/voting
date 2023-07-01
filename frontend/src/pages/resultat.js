@@ -10,15 +10,17 @@ import {
 	Toolbar,
 } from "@mui/material";
 import ResultatBox from "../components/ResultatBox";
+import { useSelector } from "react-redux";
 
 export default function Resultat() {
 	const [resultat, setResultat] = useState([]);
 	const [totalVote, setTotalVote] = useState(0);
 	const [inscrit, setInscrit] = useState(0);
+	const token = useSelector((state) => state.user.token);
 
 	const getResulatData = useCallback(async () => {
 		try {
-			const resultatData = await getData("resultat");
+			const resultatData = await getData("resultat", token);
 			setResultat(resultatData.result);
 			setTotalVote(resultatData.totalVotes);
 			setInscrit(resultatData.validVotesCount);
@@ -33,25 +35,6 @@ export default function Resultat() {
 
 	return (
 		<Box>
-			<AppBar color="inherit">
-				<Toolbar>
-					<Container>
-						<Box
-							sx={{
-								display: "flex",
-								flexDirection: "row",
-								alignItems: "center",
-								justifyContent: "space-between",
-								p: 2,
-							}}
-						>
-							<Typography variant="h6" component="div">
-								Vote électronique {">"} Résultat de vote
-							</Typography>
-						</Box>
-					</Container>
-				</Toolbar>
-			</AppBar>
 			<Toolbar />
 			<Container>
 				{resultat.length > 0 ? (

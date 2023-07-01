@@ -21,28 +21,37 @@ interface AuthenticatedRequest extends Request {
   user?: DecodedToken;
 }
 
+// Stockez la clé JWT à l'extérieur de la fonction middleware
+const decodedTokenKey = jwt_key;
+
 const authMiddleware = (allowedRoles: Role[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const token = req.header("Authorization");
+    const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token)
+    console.log(token);
+
+    if (!token) {
       return res.status(401).json({ message: "Missing token" });
+    }
+
+    console.log(token);
 
     try {
-      const decodedToken = jwt.verify(
-        token,
-        jwt_key
-      ) as DecodedToken;
+      const decodedToken = jwt.verify(token, decodedTokenKey) as DecodedToken;
+
+      console.log(decodedToken);
 
       const userRole: Role = decodedToken?.information.role;
 
-      if(!decodedToken?.information.is_verified) {
+      if (!decodedToken?.information.is_verified) {
+        console.log("User not verified");
         return res.status(400).json({
           message: "Utilisateur non vérifié",
         });
       }
 
       if (!allowedRoles.includes(userRole)) {
+        console.log("User not allowed", userRole);
         return res.status(403).json({ message: "Unauthorized" });
       }
       req.user = decodedToken;

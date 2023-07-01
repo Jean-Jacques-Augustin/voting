@@ -8,14 +8,16 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { getData } from "../../middleware/connexionBack";
+import { useSelector } from "react-redux";
 
 export default function Votes() {
 	const [voters, setVoters] = useState([]);
 	const [resultat, setResultat] = useState([]);
+	const token = useSelector((state) => state.user.token);
 
 	const getResulatData = useCallback(async () => {
 		try {
-			const resultatData = await getData("getVotes");
+			const resultatData = await getData("getVotes", token);
 			setResultat(resultatData);
 		} catch (error) {
 			console.error(error);
