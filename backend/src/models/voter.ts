@@ -16,7 +16,14 @@ const voterSchema = new Schema({
     date: {
         type: Date,
         default: Date.now,
-    }
+    },
+
+    // si te tableaux candidateId.length > 1 alors on a un vote nul
+    description: {
+        type: String,
+        required: true,
+    },
+
 });
 
 const VoterModel = model<Voter>('Voter', voterSchema);

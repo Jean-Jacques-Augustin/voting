@@ -1,4 +1,4 @@
-import { Box, Button, Card } from "@mui/material";
+import { Box, Button, Card, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
 import CustomTextField from "../components/CustomTextField";
 import { Link } from "react-router-dom";
@@ -27,6 +27,8 @@ export default function Login() {
 		num_vote: "",
 		password: "",
 	});
+	
+	const [loginError, setLoginError] = useState("");
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
@@ -45,8 +47,6 @@ export default function Login() {
 			navigate("/voter");
 		}
 	}, []);
-
-	console.log(vote.user.isLogged, );
 
 	const sendLoginRequest = async () => {
 		try {
@@ -68,15 +68,12 @@ export default function Login() {
 				dispatch(setVerified(true));
 				navigate("/voter");
 			} else {
-				setErrors(
-					"Une erreur s'est produite lors de la connexion."
-				);
+				setLoginError("Une erreur s'est produite lors de la connexion. Verifiez vos identifiants.");
 			}
 		} catch (error) {
-			setErrors("Une erreur s'est produite lors de la connexion.");
+			setLoginError("Une erreur s'est produite lors de la connexion. Verifiez vos identifiants. ");
 		}
 	};
-
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -108,6 +105,11 @@ export default function Login() {
 		>
 			<Card sx={{ width: 400, padding: "2vh" }}>
 				<h1>Connexion</h1>
+				{loginError && (
+					<Alert severity="error" sx={{ mb: 2 }}>
+						{loginError}
+					</Alert>
+				)}
 				<form
 					onSubmit={handleSubmit}
 					style={{

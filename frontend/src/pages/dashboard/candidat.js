@@ -12,6 +12,7 @@ import ConfirmationDialogue from "../../components/dialogue";
 import {getData} from "../../middleware/connexionBack";
 import Typography from "@mui/material/Typography";
 import AddCandidat from "../../components/candidat/addCandidat";
+import {useCallback, useEffect} from "react";
 
 
 export default function Candidat() {
@@ -20,28 +21,29 @@ export default function Candidat() {
     const [data, setData] = React.useState([]);
 
 
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userData = await getData('users');
-                const candidateData = await getData('candidates');
-
-                // Combine user and candidate data based on userId
-                const combinedData = candidateData.map(candidate => {
-                    const matchingUser = userData.find(user => user._id === candidate.userId);
-                    return {
-                        ...matchingUser, ...candidate, _id: candidate._id
-                    };
-                });
-
-                setData(combinedData);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchData().then(r => console.log('r', r));
+    const fetchData = useCallback(async () => {
+        try {
+            const userData = await getData('users');
+            const candidateData = await getData('candidates');
+    
+            // Combine user and candidate data based on userId
+            const combinedData = candidateData.map(candidate => {
+                const matchingUser = userData.find(user => user._id === candidate.userId);
+                return {
+                    ...matchingUser, ...candidate, _id: candidate._id
+                };
+            });
+    
+            setData(combinedData);
+        } catch (error) {
+            console.error(error);
+        }
     }, []);
+    
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+    
 
 
     const openDialog = () => {
@@ -111,7 +113,7 @@ export default function Candidat() {
                 open={open}
                 onClose={handleClose}
                 content={<AddCandidat/>}
-                title={'Ajouter un utilisateur'}
+                title={'Ajouter un candidat'}
                 value={value}
             />
         </Paper>

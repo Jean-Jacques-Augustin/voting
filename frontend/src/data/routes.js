@@ -14,7 +14,7 @@ export const routes = [
         icon: <PersonIcon/>,
     },
     {
-        path: "/dashboard/users",
+        path: "/dashboard/votes",
         name: "Résultat de vote",
         icon: <CheckBoxIcon/>,
     },

@@ -1,83 +1,132 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getData } from "../middleware/connexionBack";
+import {
+	Grid,
+	Container,
+	Typography,
+	Card,
+	Box,
+	AppBar,
+	Toolbar,
+} from "@mui/material";
+import ResultatBox from "../components/ResultatBox";
 
 export default function Resultat() {
-    const [voters, setVoters] = useState([]);
-    const [resultat, setResultat] = useState([]);
+	const [resultat, setResultat] = useState([]);
+	const [totalVote, setTotalVote] = useState(0);
+	const [inscrit, setInscrit] = useState(0);
 
-    // Get data from the API
-    const getCandidatData = useCallback(async () => {
-        try {
-            const userData = await getData("users");
-            const candidateData = await getData("candidates");
+	const getResulatData = useCallback(async () => {
+		try {
+			const resultatData = await getData("resultat");
+			setResultat(resultatData.result);
+			setTotalVote(resultatData.totalVotes);
+			setInscrit(resultatData.validVotesCount);
+		} catch (error) {
+			console.error(error);
+		}
+	}, []);
 
-            const combinedData = candidateData.map((candidate) => {
-                const matchingUser = userData.find(
-                    (user) => user._id === candidate.userId
-                );
-                return {
-                    ...matchingUser,
-                    ...candidate,
-                    _id: candidate._id,
-                };
-            });
-            setVoters(combinedData);
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
+	useEffect(() => {
+		getResulatData();
+	}, [getResulatData]);
 
-    const getResulatData = useCallback(async () => {
-        try {
-            const resultatData = await getData("getVotes");
-            setResultat(resultatData);
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
+	return (
+		<Box>
+			<AppBar color="inherit">
+				<Toolbar>
+					<Container>
+						<Box
+							sx={{
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								justifyContent: "space-between",
+								p: 2,
+							}}
+						>
+							<Typography variant="h6" component="div">
+								Vote électronique {">"} Résultat de vote
+							</Typography>
+						</Box>
+					</Container>
+				</Toolbar>
+			</AppBar>
+			<Toolbar />
+			<Container>
+				{resultat.length > 0 ? (
+					<div>
+						<Card
+							variant="outlined"
+							sx={{
+								display: "flex",
+								flexDirection: {
+									xs: "column",
+									sm: "column",
+								},
+								alignItems: {
+									xs: "center",
+									sm: "flex-start",
+								},
+								p: 2,
+								mt: 2,
+							}}
+						>
+							<Typography variant="h5" marginBottom="1rem">
+								Nombre de votants inscrits:
+								<b>{totalVote}</b>
+							</Typography>
+							<Typography
+								variant="h5"
+								f
+								marginBottom="1rem"
+							>
+								Nombre de votants ayant voté:{" "}
+								<b>{inscrit}</b>
+							</Typography>
+						</Card>
 
-    useEffect(() => {
-        getCandidatData().then((r) => console.log(r));
-        getResulatData().then((r) => console.log(r));
-    }, [getCandidatData]);
-
-    const totalVote = resultat.length;
-
-    const vote = resultat.filter((result) => result.candidateId.length === 1);
-
-    // Regroup votes by candidate
-    const candidat = voters.map((voter) => {
-        const matchingVote = resultat.filter(
-            (result) => result.candidateId[0] === voter._id
-        );
-        return {
-            ...voter,
-            ...matchingVote,
-            _id: voter._id,
-        };
-    });
-
-    // Count votes for each candidate
-    const countVotes = candidat.reduce((acc, candidate) => {
-        const votes = candidate.length;
-        if (!acc[candidate.name]) {
-            acc[candidate.name] = votes;
-        } else {
-            acc[candidate.name] += votes;
-        }
-        return acc;
-    }, {});
-
-    return (
-        <div>
-            <h1>Resultat</h1>
-            <p>Nombre total de votes : {totalVote}</p>
-            {/* Afficher le nombre de votes pour chaque candidat */}
-            {Object.entries(countVotes).map(([candidate, votes]) => (
-                <p key={candidate}>
-                    Votes de {candidate}: {votes}
-                </p>
-            ))}
-        </div>
-    );
+						<Grid
+							container
+							spacing={2}
+							justifyContent="start"
+							alignItems="center"
+							sx={{ mt: "2rem" }}
+						>
+							{resultat.map((result, index) => (
+								<Grid
+									key={index}
+									item
+									xs={12}
+									sm={6}
+									md={6}
+								>
+									<ResultatBox
+										name={result.candidate.party}
+										imageUrl={
+											result.candidate.imageUrl
+										}
+										parties={
+											result.candidate.party
+										}
+										description={
+											result.candidate
+												.description
+										}
+										nbVote={result.nbVote}
+										percent={result.percent}
+										nbVoteTotal={totalVote}
+									/>
+								</Grid>
+							))}
+						</Grid>
+					</div>
+				) : (
+					<Typography variant="h5" marginBottom="1rem">
+						Aucun résultat disponible
+					</Typography>
+				)}
+			</Container>
+		</Box>
+	);
 }

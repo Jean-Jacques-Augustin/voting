@@ -42,10 +42,15 @@ export default function Voter() {
 
 
     const sendVote = async () => {
+
+        const candidateIdArray = Object.keys(votes.votes);
+
         const voteData = {
           num_vote: num_vote,
-          candidateId: votes.votes,
+          candidateId: candidateIdArray,
         };
+
+        console.log(voteData);
       
         const response = await fetch(`${baseUrl}/createVote`, {
           method: "POST",
@@ -59,8 +64,6 @@ export default function Voter() {
         const data = await response.json();
         console.log(data);
       };
-
-
 
 
     return (<Box>

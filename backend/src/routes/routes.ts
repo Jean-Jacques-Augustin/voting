@@ -10,7 +10,7 @@ import {
 import {loginUser, registerUser, verifyUser} from "../middleware/authentication";
 import multer from "multer";
 import {fileFilter, fileStorage} from "../utils/multer";
-import {createVoter, getVoters} from "../middleware/voter";
+import {ComputeVoter, createVoter, getVoters} from "../middleware/voter";
 
 const upload = multer({storage: fileStorage, fileFilter: fileFilter});
 
@@ -58,6 +58,7 @@ appRoute.post('/login', loginUser);
 
 appRoute.post('/createVote', createVoter);
 appRoute.get('/getVotes', getVoters)
+appRoute.get('/resultat', ComputeVoter)
 
 
 export default appRoute;

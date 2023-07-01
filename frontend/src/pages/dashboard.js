@@ -24,6 +24,8 @@ import { Route, Routes } from "react-router-dom";
 import Candidat from "./dashboard/candidat";
 import { Link } from "react-router-dom";
 import NavControl from "../components/NavControl";
+import Votes from "./dashboard/voter";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -211,6 +213,7 @@ export default function Dashboard() {
         <Routes path={"/dashboar/*"}>
           <Route path={"/users"} element={<Users />} />
           <Route path={"/candidat"} element={<Candidat />} />
+          <Route path={"/votes"} element={<Votes />} />
         </Routes>
       </Box>
     </Box>
