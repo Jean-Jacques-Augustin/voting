@@ -2,6 +2,7 @@ import {Express} from "express";
 import express from "express";
 import ConnexionDB from "./db/connexion";
 import appRoute from "./routes/routes";
+import { initializeAdminUser } from "./toolsdb";
 
 const cors = require('cors');
 
@@ -14,7 +15,10 @@ app.use('/api', appRoute);
 app.use('/api/img', express.static('public/images'));
 ConnexionDB();
 
+initializeAdminUser();
+
 const PORT = 5002;
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

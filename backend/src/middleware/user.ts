@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import UserModel from "../models/user";
 
 
-interface CreateUserDto {
+export interface CreateUserDto {
     name: string;
     email: string;
     num_vote: string;
