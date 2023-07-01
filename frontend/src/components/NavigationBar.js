@@ -74,7 +74,8 @@ export default function NavigationBar() {
 	const [drawerOpen, setDrawerOpen] = React.useState(false);
 	const user = useSelector((state) => state.user);
 
-	const routes = user.isConnected ? unconnectedRoutes : connectedRoutes;
+	const routes = user.isConnected ?  connectedRoutes : unconnectedRoutes;
+	const isAdmin = user.isAdmin;
 
 	const handleDrawerToggle = () => {
 		setDrawerOpen(!drawerOpen);

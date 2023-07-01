@@ -4,7 +4,8 @@
 			"name": "voting app",
 			"script": "npx",
 			"interpreter": "none",
-			"args": "serve -p 8443 -T"
+			"args": "pm2 serve build 8443 --spa"
+
 		}
 	]
 }
