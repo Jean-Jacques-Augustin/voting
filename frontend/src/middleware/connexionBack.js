@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const baseUrl = "https://app1.fordisco-ius.com/api";
+//export const baseUrl = "https://app1.fordisco-ius.com/api";
 
-//export const baseUrl = "http://localhost:5002/api";
+export const baseUrl = "http://localhost:5002/api";
 
 export const postData = async (url, data, token) => {
     try {
