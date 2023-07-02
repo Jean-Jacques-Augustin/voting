@@ -45,7 +45,7 @@ export default function Candidat() {
     
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, [fetchData, open]);
     
 
 

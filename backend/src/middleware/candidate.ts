@@ -40,7 +40,6 @@ export async function getCandidateById(req: Request, res: Response, next: NextFu
 export async function createCandidate(req: Request, res: Response) {
     try {
         const {party, userId, description} = req.body;
-        const imageUrl = `img/${req.file?.filename}`;
 
         const user = UserModel.findById(userId);
 
@@ -48,7 +47,7 @@ export async function createCandidate(req: Request, res: Response) {
             return res.status(404).json({message: 'Aucun utilisateur trouvé pour l\'ID fourni.'});
         }
 
-        const candidate = {party, userId, description, imageUrl};
+        const candidate = {party, userId, description};
 
         const newCandidate = await CandidateModel.create(candidate);
         res.status(201).json(newCandidate);

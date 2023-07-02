@@ -100,7 +100,6 @@ export default function Voter() {
                                         description={
                                             voter.description
                                         }
-                                        imageUrl={voter.imageUrl}
                                         UID={voter._id}
                                     />
                                 </Grid>

@@ -36,6 +36,15 @@ export const createVoter = async (req: Request, res: Response) => {
     try {
         const { num_vote, candidateId } = req.body;
 
+        // voir si le num_vote existe déjà
+
+        // Vérifier si le num_vote existe déjà
+        const existNumVote = await Voter.findOne({ num_vote: num_vote });
+
+        if (existNumVote) {
+            res.status(203).json({ error: 'Ce numéro de vote existe déjà' });
+            return;
+        }
         const description = candidateId.length > 1 ? 'Invalide' : 'Valide';
 
         const voter = await Voter.create({ num_vote, candidateId, description });

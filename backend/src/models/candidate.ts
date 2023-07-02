@@ -5,23 +5,15 @@ import {Candidate} from "../interfaces/candidat";
 const candidateSchema = new Schema<Candidate>({
     party: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     userId: {
         type: "string",
-        required: true,
-        unique: true
+        required: true
     },
     description: {
         type: String,
-        required: true,
-        unique: true
-    },
-    imageUrl: {
-        type: String,
-        required: true,
-        unique: true
+        required: true
     }
 });
 

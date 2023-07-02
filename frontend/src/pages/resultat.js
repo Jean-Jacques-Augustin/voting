@@ -86,9 +86,6 @@ export default function Resultat() {
 								>
 									<ResultatBox
 										name={result.candidate.party}
-										imageUrl={
-											result.candidate.imageUrl
-										}
 										parties={
 											result.candidate.party
 										}

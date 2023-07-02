@@ -11,6 +11,30 @@ import {
 import { baseUrl } from "../middleware/connexionBack";
 
 const ResultatBox = (props) => {
+	const getRandomColor = () => {
+		const colors = [
+			"#FFC107",
+			"#03A9F4",
+			"#4CAF50",
+			"#9C27B0",
+			"#F44336",
+		];
+		const randomIndex = Math.floor(Math.random() * colors.length);
+		return colors[randomIndex];
+	};
+
+	const avatarStyle = {
+		width: { xs: 100, sm: 150 },
+		height: { xs: 100, sm: 150 },
+		border: "2px solid #ffffff",
+		boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+		backgroundColor: getRandomColor(),
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		fontSize: "3rem",
+	};
+
 	return (
 		<Card variant="outlined">
 			<CardContent
@@ -21,16 +45,13 @@ const ResultatBox = (props) => {
 					p: 2,
 				}}
 			>
-				<Avatar
-					alt={props.name}
-					src={`${baseUrl}/${props.imageUrl}`}
-					sx={{
-						width: { xs: 100, sm: 150 },
-						height: { xs: 100, sm: 150 },
-						border: "2px solid #ffffff",
-						boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-					}}
-				/>
+				<Avatar alt={props.name} sx={avatarStyle}
+
+					
+				>
+					{props.name[0]}
+				
+				</Avatar>
 
 				<Box
 					sx={{
