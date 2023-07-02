@@ -5,16 +5,18 @@ import {User} from "../interfaces/user";
 const userSchema = new Schema<User>({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     num_vote: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     role: {
         type: String,

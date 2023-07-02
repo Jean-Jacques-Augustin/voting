@@ -5,7 +5,8 @@ import {Authentication} from "../interfaces/authentication";
 const AuthentificationSchema = new Schema({
     num_vote: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,

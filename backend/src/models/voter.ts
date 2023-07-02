@@ -6,6 +6,7 @@ const voterSchema = new Schema({
     num_vote: {
         type: String,
         required: true,
+        unique: true
     },
     candidateId: [
         {
@@ -23,7 +24,6 @@ const voterSchema = new Schema({
         type: String,
         required: true,
     },
-
 });
 
 const VoterModel = model<Voter>('Voter', voterSchema);
