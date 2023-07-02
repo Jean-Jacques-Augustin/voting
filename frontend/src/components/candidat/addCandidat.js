@@ -30,25 +30,20 @@ function AddCandidat() {
 		const file = event.target.files[0];
 		setFormData((formData) => ({ ...formData, image: file }));
 	}, []);
+
 	const token = useSelector((state) => state.user.token);
 
-	const fetchData = useCallback(async () => {
-		try {
-			const response = await getData("users", token);
-			setData(response);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [token]);
-
 	useEffect(() => {
-		if (token && token !== "" && token !== "undefined") {
-			fetchData();
-		} else {
-			console.log("token is not defined", token);
-		}
-	}, [fetchData, token]);
-	
+		const fetchData = async () => {
+			try {
+				const response = await getData("users", token);
+				setData(response);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		fetchData();
+	}, []);
 
 	const handleInputChange = useCallback((event) => {
 		const { name, value } = event.target;
@@ -79,29 +74,34 @@ function AddCandidat() {
 			setErrors(formErrorsRef.current);
 
 			if (Object.keys(formErrorsRef.current).length > 0) {
+				console.log("Form errors", formErrorsRef.current);
 				return;
 			}
 
-			if (hasFormDataChanged(formData)) {
-				const response = await axios.post(
-					`${baseUrl}/candidates`,
-					formData,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-							"Authorization": `Bearer ${token}`,
-						},
+			const response = await axios.post(
+				`${baseUrl}/candidates`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
 					},
-				);
-
-				if (response.status === 201) {
-					setSuccess(true);
-				} else {
-					setErrors({
-						global: "Une erreur est survenue, veuillez réessayer.",
-					});
-				}
+				},
+			);
+			
+			if (response.status === 201) {
+				setSuccess(true);
+				setFormData({
+					party: "",
+					userId: "",
+					description: "",
+					image: null,
+				});
+			} else {
+				setSuccess(false);
 			}
+
+
+			console.log("Form submitted");
 		},
 		[formData],
 	);
@@ -121,7 +121,6 @@ function AddCandidat() {
 	return (
 		<Box
 			component="form"
-			onSubmit={handleSubmit}
 			sx={{
 				display: "flex",
 				flexDirection: "column",
@@ -234,7 +233,11 @@ function AddCandidat() {
 			</Box>
 
 			{/* Submit button */}
-			<Button variant="contained" color="primary" type="submit">
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={handleSubmit}
+			>
 				Ajouter
 			</Button>
 
