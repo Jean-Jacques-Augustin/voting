@@ -13,6 +13,7 @@ import Box from "@mui/material/Box";
 import { getData, postData } from "../../middleware/connexionBack";
 import axios from "axios";
 import { baseUrl } from "../../middleware/connexionBack";
+import { useSelector } from "react-redux";
 
 function AddCandidat() {
 	const [formData, setFormData] = useState({
@@ -29,19 +30,25 @@ function AddCandidat() {
 		const file = event.target.files[0];
 		setFormData((formData) => ({ ...formData, image: file }));
 	}, []);
+	const token = useSelector((state) => state.user.token);
+
+	const fetchData = useCallback(async () => {
+		try {
+			const response = await getData("users", token);
+			setData(response);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [token]);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await getData("users");
-				setData(response);
-				console.log(response);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		fetchData();
-	}, []);
+		if (token && token !== "" && token !== "undefined") {
+			fetchData();
+		} else {
+			console.log("token is not defined", token);
+		}
+	}, [fetchData, token]);
+	
 
 	const handleInputChange = useCallback((event) => {
 		const { name, value } = event.target;
@@ -82,6 +89,7 @@ function AddCandidat() {
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
+							"Authorization": `Bearer ${token}`,
 						},
 					},
 				);
