@@ -36,7 +36,7 @@ appRoute.delete('/users/:id',authMiddleware([Role.Admin]),  deleteUser);
  * Candidate routes
  */
 
-appRoute.post('/candidates', upload.single('image'),authMiddleware([Role.Admin]),  createCandidate);
+appRoute.post('/candidates', upload.single('image'),  createCandidate);
 
 appRoute.get('/candidates', getAllCandidates);
 
