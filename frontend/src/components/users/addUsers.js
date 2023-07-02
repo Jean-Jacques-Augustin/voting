@@ -3,8 +3,10 @@ import axios from "axios";
 import CustomTextField from "../CustomTextField";
 import {Button} from "@mui/material";
 import {postData} from "../../middleware/connexionBack";
+import {useSelector} from "react-redux";
 
 const AddUser = () => {
+    const token = useSelector((state) => state.user.token);
     const [formData, setFormData] = useState({
         name: "", email: "", num_vote: "", address: "",
     });
@@ -34,7 +36,7 @@ const AddUser = () => {
         }
 
         try {
-            const response = await postData("users" , formData);
+            const response = await postData("users" , formData ,token );
             console.log(response);
         } catch (error) {
             console.error(error);

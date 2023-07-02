@@ -6,7 +6,8 @@ export const postData = async (url, data, token) => {
     try {
         const config = {
             headers: {
-                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
         };
         const response = await axios.post(`${baseUrl}/${url}`, data, config);

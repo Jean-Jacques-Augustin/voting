@@ -21,13 +21,13 @@ const appRoute = express.Router();
  * User routes
  */
 
-appRoute.get('/users' , authMiddleware([Role.Admin]), getAllUsers);
+appRoute.get('/users' , authMiddleware([Role.Admin, Role.User]), getAllUsers);
 
 appRoute.post('/users', authMiddleware([Role.Admin]),  createUser);
 
-appRoute.get('/users/:id',authMiddleware([Role.Admin]),  getUserById);
+appRoute.get('/users/:id',authMiddleware([Role.Admin, Role.User]),  getUserById);
 
-appRoute.put('/users/:id',authMiddleware([Role.Admin]),  updateUser);
+appRoute.put('/users/:id',authMiddleware([Role.Admin, Role.User]),  updateUser);
 
 appRoute.delete('/users/:id',authMiddleware([Role.Admin]),  deleteUser);
 
@@ -42,9 +42,9 @@ appRoute.get('/candidates', getAllCandidates);
 
 appRoute.get('/candidates/:id', getCandidateById);
 
-appRoute.put('/candidates/:id', updateCandidate);
+appRoute.put('/candidates/:id',authMiddleware([Role.Admin]), updateCandidate);
 
-appRoute.delete('/candidates/:id', deleteCandidate);
+appRoute.delete('/candidates/:id',authMiddleware([Role.Admin]), deleteCandidate);
 
 /**
  * Authentication routes || n'a pas besoin de role
@@ -57,9 +57,9 @@ appRoute.post('/login', loginUser);
  * Voter
  **/
 
-appRoute.post('/createVote', createVoter);
-appRoute.get('/getVotes', getVoters)
-appRoute.get('/resultat', ComputeVoter)
+appRoute.post('/createVote',authMiddleware([Role.Admin, Role.User]), createVoter);
+appRoute.get('/getVotes',authMiddleware([Role.Admin, Role.User]), getVoters)
+appRoute.get('/resultat',authMiddleware([Role.Admin, Role.User]), ComputeVoter)
 
 
 export default appRoute;
