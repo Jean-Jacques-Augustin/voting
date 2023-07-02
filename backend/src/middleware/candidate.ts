@@ -49,6 +49,14 @@ export async function createCandidate(req: Request, res: Response) {
 
         const candidate = {party, userId, description};
 
+        // voir s'il n'existe pas déjà un candidat pour cet party
+
+        const exist = await CandidateModel.findOne ({party: party});
+
+        if (exist) {
+            return res.status(203).json({message: 'Un candidat existe déjà pour ce parti.'});
+        }
+
         const newCandidate = await CandidateModel.create(candidate);
         res.status(201).json(newCandidate);
 

@@ -1,166 +1,164 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
+	Button,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	Typography,
 } from "@mui/material";
 import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import { getData, postData } from "../../middleware/connexionBack";
-import axios from "axios";
-import { baseUrl } from "../../middleware/connexionBack";
 import { useSelector } from "react-redux";
 
 function AddCandidat() {
-  const [formData, setFormData] = useState({
-    party: "",
-    userId: "",
-    description: "",
-  });
-  const [data, setData] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
+	const [formData, setFormData] = useState({
+		party: "",
+		userId: "",
+		description: "",
+	});
+	const [data, setData] = useState([]);
+	const [errors, setErrors] = useState({});
+	const [success, setSuccess] = useState(false);
+	const token = useSelector((state) => state.user.token);
+	const formErrorsRef = useRef({});
 
-  const token = useSelector((state) => state.user.token);
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await getData("users", token);
+				setData(response);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		fetchData();
+	}, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getData("users", token);
-        setData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setFormData((formData) => ({ ...formData, [name]: value }));
+		setErrors((errors) => ({ ...errors, [name]: "" }));
+	};
 
-  const handleInputChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setFormData((formData) => ({ ...formData, [name]: value }));
-    setErrors((errors) => ({ ...errors, [name]: "" }));
-  }, []);
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		formErrorsRef.current = {};
 
-  const formErrorsRef = useRef({});
-  const handleSubmit = useCallback(
-    async (event) => {
-      event.preventDefault();
-      formErrorsRef.current = {};
+		const requiredFields = {
+			party: "Le parti est obligatoire",
+			userId: "L'ID utilisateur est obligatoire",
+			description: "La description est obligatoire",
+		};
 
-      if (!formData.party) {
-        formErrorsRef.current.party = "Le parti est obligatoire";
-      }
+		Object.entries(requiredFields).forEach(
+			([fieldName, errorMessage]) => {
+				if (!formData[fieldName]) {
+					formErrorsRef.current[fieldName] = errorMessage;
+				}
+			},
+		);
 
-      if (!formData.userId) {
-        formErrorsRef.current.userId = "L'ID utilisateur est obligatoire";
-      }
+		setErrors(formErrorsRef.current);
 
-      if (!formData.description) {
-        formErrorsRef.current.description = "La description est obligatoire";
-      }
+		if (Object.keys(formErrorsRef.current).length > 0) {
+			console.log("Form errors", formErrorsRef.current);
+			return;
+		}
+		const response = await postData("candidates", formData, token);
 
-      setErrors(formErrorsRef.current);
+		if (response) {
+			setSuccess(true);
+			setFormData({
+				party: "",
+				userId: "",
+				description: "",
+			});
+		} else {
+			setErrors({ global: "Erreur lors de l'ajout du candidat" });
+		}
 
-      if (Object.keys(formErrorsRef.current).length > 0) {
-        console.log("Form errors", formErrorsRef.current);
-        return;
-      }
+		console.log("Form submitted");
+	};
 
-      const response = await axios.post(
-        `${baseUrl}/candidates`,
-        formData
-      );
+	return (
+		<Box
+			component="form"
+			sx={{
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "center",
+				alignItems: "center",
+				gap: "1rem",
+			}}
+		>
+			{/* Party field */}
+			<TextField
+				label="Parti"
+				name="party"
+				value={formData.party}
+				onChange={handleInputChange}
+				error={Boolean(errors.party)}
+				helperText={errors.party}
+				fullWidth
+			/>
 
-      if (response.status === 201) {
-        setSuccess(true);
-        setFormData({
-          party: "",
-          userId: "",
-          description: "",
-        });
-      } else {
-        setSuccess(false);
-      }
+			{/* User Select */}
+			<FormControl fullWidth>
+				<InputLabel id="demo-simple-select-label">
+					Nom du candidat
+				</InputLabel>
+				<Select
+					labelId="userId"
+					id="userId"
+					value={formData.userId}
+					label="Nom du candidat"
+					name="userId"
+					onChange={handleInputChange}
+				>
+					{data &&
+						data.map((item) => (
+							<MenuItem key={item._id} value={item._id}>
+								{item.name}
+							</MenuItem>
+						))}
+				</Select>
+			</FormControl>
 
-      console.log("Form submitted");
-    },
-    [formData]
-  );
+			{/* Description field */}
+			<TextField
+				fullWidth
+				label="Description"
+				name="description"
+				value={formData.description}
+				onChange={handleInputChange}
+				error={Boolean(errors.description)}
+				helperText={errors.description}
+			/>
 
-  return (
-    <Box
-      component="form"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "1rem",
-      }}
-    >
-      {/* Party field */}
-      <TextField
-        label="Parti"
-        name="party"
-        value={formData.party}
-        onChange={handleInputChange}
-        error={Boolean(errors.party)}
-        helperText={errors.party}
-        fullWidth
-      />
+			{/* Submit button */}
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={handleSubmit}
+			>
+				Ajouter
+			</Button>
 
-      {/* User Select */}
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Nom du candidat</InputLabel>
-        <Select
-          labelId="userId"
-          id="userId"
-          value={formData.userId}
-          label="Nom du candidat"
-          name="userId"
-          onChange={handleInputChange}
-        >
-          {data &&
-            data.map((item) => (
-              <MenuItem key={item._id} value={item._id}>
-                {item.name}
-              </MenuItem>
-            ))}
-        </Select>
-      </FormControl>
+			{success && (
+				<Typography sx={{ color: "green" }}>
+					Le candidat a bien été ajouté.
+				</Typography>
+			)}
 
-      {/* Description field */}
-      <TextField
-        fullWidth
-        label="Description"
-        name="description"
-        value={formData.description}
-        onChange={handleInputChange}
-        error={Boolean(errors.description)}
-        helperText={errors.description}
-      />
-
-      {/* Submit button */}
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Ajouter
-      </Button>
-
-      {success && (
-        <Typography sx={{ color: "green" }}>
-          Le candidat a bien été ajouté.
-        </Typography>
-      )}
-
-      {errors.global && (
-        <Typography sx={{ color: "red" }}>
-          Erreur lors de l'ajout du candidat.
-        </Typography>
-      )}
-    </Box>
-  );
+			{errors.global && (
+				<Typography sx={{ color: "red" }}>
+					Erreur lors de l'ajout du candidat.
+				</Typography>
+			)}
+		</Box>
+	);
 }
 
 export default React.memo(AddCandidat);
